@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  orders:
+    build:
+      context: ./orders
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./orders:/orders
+    command: >
+     sh -c "python manage.py wait_for_db &&
+            python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:8000 &&
+            celery -A orders worker"
+    environment:
+      DEBUG: 1
+      SECRET_KEY: w5t4rfgl+mt9hq3$gab4pj_8mnww(x2e042uka!&-dvyly#$uu
+      EMAIL_HOST_USER: for_test@internet.ru
+      EMAIL_HOST_PASSWORD: 7VMueyp9ESG1df010G1As7
+    depends_on:
+      - db
+
+  db:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: orders
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+
