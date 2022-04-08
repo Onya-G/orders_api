@@ -22,8 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = int(os.environ.get('DEBUG', default=0))
+DEBUG = True
+# DEBUG = int(os.environ.get('DEBUG', default=0))
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
 # Application definition
@@ -121,6 +121,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 AUTH_USER_MODEL = 'backend.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -143,9 +147,6 @@ REST_FRAMEWORK = {
 
 }
 
-
-# EMAIL_HOST_USER = 'for_tests@internet.ru'
-# EMAIL_HOST_PASSWORD = '7VMueyp9ESG1df010G1A'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
