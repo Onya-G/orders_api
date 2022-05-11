@@ -19,11 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'al;shv;kn3259as;ldknkdv%@DTH'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# DEBUG = int(os.environ.get('DEBUG', default=0))
+# DEBUG = int(os.environ.get('DEBUG', default=1))
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
 # Application definition
@@ -35,10 +35,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
     'django_rest_passwordreset',
-    'backend'
+    'backend',
+    'drf_spectacular',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.telegram',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -73,6 +81,18 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get("ENGINE", "django.db.backends.sqlite3"),
+#         'NAME': os.environ.get("DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+#         'HOST': os.environ.get("HOST", "localhost"),
+#         'PORT': os.environ.get("PORT", "5432"),
+#         'USER': os.environ.get("USER", "user"),
+#         'PASSWORD': os.environ.get("PASSWORD", "password")
+#     }
+# }
+
 
 DATABASES = {
     'default': {
@@ -145,11 +165,34 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '20/minute',
+        'anon': '10/minute',
+    },
+
+    # 'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Shop API',
+    'DESCRIPTION': 'REST API для агрегатора товаров',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'for_tests@internet.ru'
+EMAIL_HOST_PASSWORD = 'FiSq4AbWbJrddjUF2LN4' # пароль для внешних приложений, не от самого ящика
 EMAIL_PORT = '465'
 EMAIL_USE_SSL = True
 SERVER_EMAIL = EMAIL_HOST_USER
@@ -161,3 +204,10 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['application/json']
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+SITE_ID = 1

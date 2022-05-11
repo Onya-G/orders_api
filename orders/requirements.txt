@@ -7,3 +7,9 @@ kombu==5.2.4
 psycopg2-binary==2.8.6
 redis==4.2.2
 ujson==5.1.0
+drf_spectacular==0.22.0
+django-allauth==0.50.0
+
+pytest
+pytest-django
+model_bakery
