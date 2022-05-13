@@ -20,3 +20,5 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 
+RUN adduser -D user
+USER user

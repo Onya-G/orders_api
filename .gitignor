@@ -1,0 +1,9 @@
+*.pyc
+__pycache__
+env
+*.sqlite3
+.DS_Store
+staticfiles
+**/.pytest_cache
+*.log
+.coverage

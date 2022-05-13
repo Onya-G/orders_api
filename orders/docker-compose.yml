@@ -7,26 +7,45 @@ services:
     volumes:
       - ./:/usr/src/app/
     ports:
-      - '8000:8000'
+      - "8000:8000"
     environment:
       - DEBUG=1
-      - SECRET_KEY=5(ofgm*9kk5%&pq@#kfjl1nc6eu8*hm40w_mh-%6w0-50q8591
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-      - ENGINE=django.db.backends.postgresql
-      - DATABASE=articles
-      - USER=username
-      - PASSWORD=aerbb@#GFER%v
+      - SECRET_KEY=3#2gr%&pq@#kfjl1nc6eu8*hm40w_mh-%6w0-50q8591
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
       - HOST=db
-      - PORT=5432
+      - EMAIL_HOST=smtp.mail.ru
+      - EMAIL_HOST_USER=for_test@internet.ru
+      - EMAIL_HOST_PASSWORD=7VMueyp9ESG1df010G1As7
     depends_on:
       - db
+
   db:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=aerbb@#GFER%v
-      - POSTGRES_DB=articles
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=orders
+
+  celery:
+    build: .
+    command: celery -A orders worker -l info
+    volumes:
+      - ./:/usr/src/app/
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=3#2gr%&pq@#kfjl1nc6eu8*hm40w_mh-%6w0-50q8591
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
 volumes:
   postgres_data:

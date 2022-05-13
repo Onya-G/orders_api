@@ -19,11 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY')
-SECRET_KEY = 'al;shv;kn3259as;ldknkdv%@DTH'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+# SECRET_KEY = 'al;shv;kn3259as;ldknkdv%@DTH'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = int(os.environ.get('DEBUG', default=1))
+# DEBUG = True
+DEBUG = int(os.environ.get('DEBUG', default=1))
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
 # Application definition
@@ -41,11 +41,10 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'backend',
     'drf_spectacular',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.telegram',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -82,28 +81,28 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': os.environ.get("ENGINE", "django.db.backends.sqlite3"),
-#         'NAME': os.environ.get("DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
-#         'HOST': os.environ.get("HOST", "localhost"),
-#         'PORT': os.environ.get("PORT", "5432"),
-#         'USER': os.environ.get("USER", "user"),
-#         'PASSWORD': os.environ.get("PASSWORD", "password")
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'orders',
-        'HOST': '127.0.0.1',
+        'HOST': os.environ.get("HOST", "localhost"),
         'PORT': '5432',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres'
+        'USER': os.environ.get("DB_USER", "postgres"),
+        'PASSWORD': os.environ.get("DB_PASSWORD", "postgres")
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'orders',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres'
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -190,9 +189,9 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_HOST_USER = 'for_tests@internet.ru'
-EMAIL_HOST_PASSWORD = 'FiSq4AbWbJrddjUF2LN4' # пароль для внешних приложений, не от самого ящика
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = '465'
 EMAIL_USE_SSL = True
 SERVER_EMAIL = EMAIL_HOST_USER
@@ -204,10 +203,26 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['application/json']
+#
+# AUTHENTICATION_BACKENDS = [
+#     # Needed to login by username in Django admin, regardless of `allauth`
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
 
-AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-SITE_ID = 1
+# SITE_ID = 1
+#
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': [
+#             'profile',
+#             'email',
+#         ],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     }
+# }
+#
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
