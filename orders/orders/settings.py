@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # DEBUG = True
 DEBUG = int(os.environ.get('DEBUG', default=1))
 ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 # Application definition
 
 INSTALLED_APPS = [
@@ -83,12 +83,12 @@ WSGI_APPLICATION = 'orders.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'orders',
+        'ENGINE': os.environ.get("ENGINE", "django.db.backends.sqlite3"),
+        'NAME': os.environ.get("DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
         'HOST': os.environ.get("HOST", "localhost"),
-        'PORT': '5432',
-        'USER': os.environ.get("DB_USER", "postgres"),
-        'PASSWORD': os.environ.get("DB_PASSWORD", "postgres")
+        'PORT': os.environ.get("PORT", "5432"),
+        'USER': os.environ.get("USER", "user"),
+        'PASSWORD': os.environ.get("PASSWORD", "password")
     }
 }
 
